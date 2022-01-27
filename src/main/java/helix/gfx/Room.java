@@ -52,6 +52,7 @@ public abstract class Room extends ScreenAdapter {
 	public Room(BaseGame game) {
 		this.game = game;
 		this.data = game.getData();
+		this.data.addRoom(this);
 	}
 	
 	/**

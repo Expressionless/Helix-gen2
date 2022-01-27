@@ -44,8 +44,9 @@ public class HelixException extends Exception {
 	}
 	
 	public void terminateGame(BaseGame game) {
+		logger.severe(this.getMessage());
 		game.dispose();
-		System.err.println("Exiting with code: " + this.statusCode);
+		logger.severe("Exiting with code: " + this.statusCode);
 		Gdx.app.exit();
 	}
 }

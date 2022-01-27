@@ -1,8 +1,5 @@
 package helix.game;
 
-import java.io.File;
-import java.lang.reflect.Field;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import com.badlogic.gdx.Game;
@@ -11,12 +8,9 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-import helix.annotations.QueueAsset;
 import helix.exception.HelixException;
-import helix.exception.res.ResourceNotFoundException;
 import helix.exception.room.NoDefaultRoomException;
 import helix.gfx.Room;
-import helix.utils.ClassUtils;
 
 public abstract class BaseGame extends Game {
 	public static final Logger log = Logger.getLogger(BaseGame.class.getCanonicalName());
@@ -54,6 +48,8 @@ public abstract class BaseGame extends Game {
 		this.frameWidth = frameWidth;
 		this.frameHeight = frameHeight;
 		
+		this.data = new Data(this);
+		
 		fps = new FPSLogger();
 		
 		// Initialize default config
@@ -75,12 +71,12 @@ public abstract class BaseGame extends Game {
 		this.data.setCurrentCamera(new OrthographicCamera());
 
 		try {
-			this.loadTextures();
+			this.data.loadTextures();
 		} catch(HelixException exception) {
+			System.err.println("Texture Loading error!");
 			exception.printException();
 			exception.terminateGame(this);
 		}
-		
 		this.data.init();
 
 		try {
@@ -106,73 +102,5 @@ public abstract class BaseGame extends Game {
 	
 	public void setRoom(Long roomId) {
 		this.setRoom(this.getData().getRoomById(roomId));
-	}
-	
-	
-	
-	/**
-	 * Load all assets into the game
-	 */
-	private void loadTextures() throws HelixException {
-		// Queue Resources
-		Set<Class<?>> classes = null;
-		Boolean isJarFile = ClassUtils.inJarFile();
-		if(isJarFile) {
-			try {
-				classes = ClassUtils.getClassesFromJarFile();
-				if(classes == null)
-					classes = ClassUtils.getClasses();
-			} catch (Exception e) {
-				System.err.println("Failed to get Jar File");
-				e.printStackTrace();
-				System.exit(-1);
-			}
-		} else {
-			classes = ClassUtils.getClasses();
-		}
-
-		QueueAsset queueAnnotation;
-		Object fieldObject;
-		File targetFile;
-		
-		for (Class<?> clazz : classes) {
-			for (Field texField : clazz.getFields()) {
-				if (!texField.isAnnotationPresent(QueueAsset.class))
-					continue;
-				
-				queueAnnotation = texField.getAnnotation(QueueAsset.class);
-
-				targetFile = new File(queueAnnotation.ref());
-				if(!targetFile.exists() || targetFile.isDirectory()) {
-					if(targetFile.isDirectory()) {
-						log.severe("Target File is directory: " + queueAnnotation.ref());
-					}
-					throw new ResourceNotFoundException(queueAnnotation.ref());
-				}
-				
-				// Attempt to set the texture field to the new value
-				try {
-					fieldObject = texField.get(clazz); // clazz = Mage.class
-					texField.set(fieldObject, queueAnnotation.ref());
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
-				}
-
-				this.data.getManager().load(queueAnnotation.ref(), queueAnnotation.type());
-			}
-		}
-
-		log.info("Queued " + this.data.getManager().getQueuedAssets() + " assets to load");
-		float progress = 0, lastProgress = 0;
-		// Load Resources
-		while (!this.data.getManager().update()) {
-			// Check if progress got updated
-			progress = this.data.getManager().getProgress();
-			if (progress != lastProgress) {
-				log.info("loading: " + this.data.getManager().getProgress());
-				lastProgress = progress;
-			}
-		}
-
 	}
 }
