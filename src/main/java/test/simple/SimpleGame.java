@@ -19,7 +19,6 @@ public class SimpleGame extends BaseGame {
 	
 	@Override
 	protected void start() {
-		System.out.println("Created BaseGame");
 	}
 	
 	public static void main(String[] args) {
