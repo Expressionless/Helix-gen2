@@ -19,7 +19,7 @@ public abstract class BaseGame extends Game {
 	 * config for the application
 	 */
 	public final Lwjgl3ApplicationConfiguration config;
-	private FPSLogger fps;
+	private final FPSLogger fps;
 	
 	/**
 	 * Application dimensions
@@ -36,12 +36,17 @@ public abstract class BaseGame extends Game {
 	 * {@link helix.game.GameObject}s and {@link helix.game.objects.Entity}s and
 	 * such
 	 */
-	private Data data;
+	private final Data data;
 	
 	/**
-	 * Ran as the last thing to do on launch
+	 * Ran as the last thing to do on launch, once everything has been loaded
 	 */
 	protected abstract void start();
+	
+	/**
+	 * Initialize rooms here
+	 */
+	protected abstract void initRooms();
 	
 	public BaseGame(String title, int frameWidth, int frameHeight) {
 		this.title = title;
@@ -61,6 +66,8 @@ public abstract class BaseGame extends Game {
 		config.setForegroundFPS(90);
 		config.useVsync(true);
 		config.setResizable(false);
+		
+		log.info(frameWidth + "x" + frameHeight);
 	}
 	
 	@Override
@@ -77,18 +84,23 @@ public abstract class BaseGame extends Game {
 			exception.printException();
 			exception.terminateGame(this);
 		}
-		this.data.init();
-
+		
+		this.getData().init();
+		log.info("initialising rooms");
+		this.initRooms();
+		
 		try {
-			this.setRoom(this.data.getRooms().get(0));
+			this.setCurrentRoom(this.data.getRooms().get(0));
 		} catch (NullPointerException | IndexOutOfBoundsException exception) {
 			HelixException noRoomException = new NoDefaultRoomException(exception);
 			
 			this.dispose();
+			log.severe("No default room found!");
 			log.severe("Exiting with code: " + noRoomException.statusCode);
+			exception.printStackTrace();
 			Gdx.app.exit();
 		}
-
+		
 		this.start();
 	}
 	
@@ -96,11 +108,15 @@ public abstract class BaseGame extends Game {
 		return data;
 	}
 
-	public void setRoom(Room room) {
+	public Integer addRoom(Room room) {
+		return this.getData().addRoom(room);
+	}
+	
+	public void setCurrentRoom(Room room) {
 		super.setScreen(room);
 	}
 	
-	public void setRoom(Long roomId) {
-		this.setRoom(this.getData().getRoomById(roomId));
+	public FPSLogger getFpsLogger() {
+		return fps;
 	}
 }

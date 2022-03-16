@@ -13,11 +13,8 @@ import helix.game.Data;
  *
  */
 public abstract class Room extends ScreenAdapter {
-	
-	// Screens are less dynamic than game object (or at least should be) 
-	// so we can treat them as such
-	private static Long ID_NEXT = 0L;
-	public final Long id = ID_NEXT++;
+
+	private final String name;
 	
 	private boolean initialized = false;
 	
@@ -33,6 +30,9 @@ public abstract class Room extends ScreenAdapter {
 	 */
 	protected abstract void draw(float delta);
 	
+	/**
+	 * Called when this screen is shown for the first time
+	 */
 	protected abstract void create();
 	
 	/**
@@ -46,13 +46,13 @@ public abstract class Room extends ScreenAdapter {
 	private final BaseGame game;
 	
 	/**
-	 * Create a new Screen and link it to a {@link BaseGame}
+	 * Create a new Screen and link it to a {@link BaseGame} (Does not add to Game's data)
 	 * @param game - Game to link to 
 	 */
-	public Room(BaseGame game) {
+	public Room(BaseGame game, String name) {
 		this.game = game;
+		this.name = name;
 		this.data = game.getData();
-		this.data.addRoom(this);
 	}
 	
 	/**
@@ -82,17 +82,16 @@ public abstract class Room extends ScreenAdapter {
 		return game;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 	public Data getData() {
 		return data;
 	}
 	
 	public boolean isInitialized() {
 		return initialized;
-	}
-	
-	// TODO: Implement Current Room
-	public Room getCurrentRoom() {
-		return null;
 	}
 	
 	// TODO: Implement multiple cameras lol

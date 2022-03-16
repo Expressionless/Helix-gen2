@@ -6,12 +6,11 @@ import helix.gfx.Room;
 public class MainRoom extends Room {
 
 	public MainRoom(BaseGame game) {
-		super(game);
+		super(game, "MainRoom");
 	}
 
 	@Override
 	protected void step(float delta) {
-		
 	}
 
 	@Override

@@ -16,7 +16,7 @@ import helix.exception.res.ResourceNotFoundException;
 import helix.gfx.Room;
 import helix.utils.ClassUtils;
 
-public class Data {
+public final class Data {
 	public static final Logger log = Logger.getLogger(Data.class.getCanonicalName());
 
 	private final BaseGame game;
@@ -48,11 +48,12 @@ public class Data {
 	/**
 	 * Adds a Room to the list of rooms and returns the Room ID if successful
 	 * @param room - room to add
-	 * @return the ID of the room if successfully added. -1 if room was not succesfully added
+	 * @return the ID of the room if successfully added. -1 if room was not successfully added
 	 * 
 	 * @see {@link Room}
 	 */
 	public Integer addRoom(Room room) {
+		log.info("Adding room: " + room.getName());
 		if(this.rooms.add(room)) {
 			return this.rooms.size() - 1;
 		} else return -1;
@@ -149,15 +150,12 @@ public class Data {
 
 
 	// TODO: Consider changing search algorithms? O(n) ain't pog
-	public Room getRoomById(Long id) {
-		for(Room room : rooms) {
-			if(room.id == id) {
-				return room;
-			}
-		}
-		
-		return null;
+	public Room getRoomById(Integer id) {
+		return rooms.get(id);
 	}
 	
-	
+	public void setCurrentRoom(Room room) {
+		this.currentRoom = room;
+		game.setScreen(this.currentRoom);
+	}
 }

@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class ClassUtils {
 	public static final Logger log = Logger.getLogger(ClassUtils.class.getCanonicalName());
-	public static final String CLASS_PATH = new File("").getAbsolutePath() + "\\src\\main\\java";
+	public static final String CLASS_PATH = new File("").getAbsolutePath() + "/src/main/java";
 
 	public static Boolean inJarFile() {
 		try {
@@ -90,10 +90,14 @@ public class ClassUtils {
 
 	public static Set<Class<?>> getClasses(String path) {
 		File currentDir = new File(path);
+		if(!currentDir.exists()) {
+			log.severe("Cannot find path: " + path);
+			return null;
+		}
 		Set<String> classNameList = new HashSet<String>();
 
 		for (String p : currentDir.list())
-			classNameList.addAll(getClasses(classNameList, path + "\\" + p));
+			classNameList.addAll(getClasses(classNameList, path + "/" + p));
 
 		Set<Class<?>> classList = new HashSet<Class<?>>();
 		for (String className : classNameList) {
@@ -116,11 +120,13 @@ public class ClassUtils {
 
 		if (currentDir.isDirectory()) {
 			for (String p : currentDir.list()) {
-				File next = new File(path + "\\" + p);
+				String nextPath = path + "/" + p;
+				File next = new File(nextPath);
 				if (next.isDirectory()) {
-					classesList.addAll(getClasses(classesList, path + "\\" + p));
+					classesList.addAll(getClasses(classesList, nextPath));
 				} else {
-					classesList.add(getFullyQualifiedName(path + "\\" + p));
+					System.out.println(nextPath);
+					//classesList.add(getFullyQualifiedName(path + "\\" + p));
 				}
 			}
 		} else if (!currentDir.isDirectory()) {
@@ -134,7 +140,7 @@ public class ClassUtils {
 
 	public static String getFullyQualifiedName(String path) {
 		
-		String identifier = "src\\main\\java";
+		String identifier = "src/main/java";
 		int index = path.indexOf(identifier);
 
 		// Remove everything before incl. "java/" and then remove ".java" from the end
