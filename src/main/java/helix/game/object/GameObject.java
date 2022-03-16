@@ -34,6 +34,42 @@ public abstract class GameObject {
 	}
 	
 	/**
+	 * To be overridden as necessary. Ran before {@link GameObject#step}
+	 * 
+	 * @param delta - Time since last frame (seconds)
+	 * 
+	 * @see {@link GameObject#step}, {@link GameObject#postStep}
+	 */
+	protected void preStep(float delta) {
+	}
+
+	/**
+	 * Basic step event for {@link GameObject}
+	 * 
+	 * @param delta - Time since last frame (seconds)
+	 * 
+	 * @see {@link GameObject#preStep}, {@link GameObject#postStep}
+	 */
+	protected abstract void step(float delta);
+
+	/**
+	 * To be overridden as necessary. Called after {@link GameObject#step} <br>
+	 * Mainly used for cleanup
+	 * 
+	 * @param delta - Time since last frame (seconds)
+	 * 
+	 * @see {@link GameObject#preStep}, {@link GameObject#step}
+	 */
+	protected void postStep(float delta) {
+	}
+	
+	public void update(float delta) {
+		preStep(delta);
+		step(delta);
+		postStep(delta);
+	}
+	
+	/**
 	 * Updates the globalPosition based on a camera
 	 * @param camera
 	 */
@@ -41,6 +77,8 @@ public abstract class GameObject {
 		globalPosition.x = localPosition.x - camera.position.x;
 		globalPosition.y = localPosition.y - camera.position.y;
 	}
+	
+	// Getters and Setters
 	
 	public Room getParentRoom() {
 		return parentRoom;

@@ -1,10 +1,15 @@
 package helix.gfx;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 
 import helix.game.BaseGame;
 import helix.game.Data;
+import helix.game.object.GameObject;
+import helix.game.object.entity.Entity;
 
 /**
  * Basic implementation of {@link ScreenAdapater}
@@ -17,6 +22,8 @@ public abstract class Room extends ScreenAdapter {
 	private final String name;
 	
 	private boolean initialized = false;
+	
+	private final List<GameObject> objects = new ArrayList<GameObject>();
 	
 	/**
 	 * Basic Step event of the screen. Called before {@link Room#draw}
@@ -56,7 +63,7 @@ public abstract class Room extends ScreenAdapter {
 	}
 	
 	/**
-	 * Initialize the Screen (Can only be called once per instance)
+	 * Initialize the Screen (Is only initialized once per instance)
 	 */
 	public void init() {
 		if(initialized)
@@ -75,6 +82,18 @@ public abstract class Room extends ScreenAdapter {
 	public void render(float delta) {
 		this.step(delta);
 		this.draw(delta);
+		
+		for(GameObject object : objects) {
+			object.update(delta);
+		}
+		
+		for(GameObject object : objects) {
+			boolean isEntity = object instanceof Entity;
+			if(!isEntity)
+				continue;
+			Entity entity = (Entity)object;
+			entity.render(delta);
+		}
 	}
 	
 	// Getters and Setters
