@@ -1,4 +1,4 @@
-package helix;
+package io.sly.helix;
 
 
 import java.io.File;

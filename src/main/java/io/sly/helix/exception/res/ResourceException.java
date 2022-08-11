@@ -1,7 +1,7 @@
-package helix.exception.res;
+package io.sly.helix.exception.res;
 
-import helix.Constants;
-import helix.exception.HelixException;
+import io.sly.helix.Constants;
+import io.sly.helix.exception.HelixException;
 
 public abstract class ResourceException extends HelixException {
 

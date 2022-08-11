@@ -1,6 +1,6 @@
-package helix.exception.res;
+package io.sly.helix.exception.res;
 
-import helix.Constants;
+import io.sly.helix.Constants;
 
 public class ResourceNotFoundException extends ResourceException {
 	

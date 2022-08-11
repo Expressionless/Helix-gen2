@@ -1,4 +1,4 @@
-package helix.game;
+package io.sly.helix.game;
 
 import java.util.logging.Logger;
 
@@ -8,9 +8,9 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-import helix.exception.HelixException;
-import helix.exception.room.NoDefaultRoomException;
-import helix.gfx.Room;
+import io.sly.helix.exception.HelixException;
+import io.sly.helix.exception.screen.NoDefaultScreenException;
+import io.sly.helix.gfx.Screen;
 
 public abstract class BaseGame extends Game {
 	public static final Logger log = Logger.getLogger(BaseGame.class.getCanonicalName());
@@ -80,13 +80,12 @@ public abstract class BaseGame extends Game {
 		this.data.init();
 
 		try {
-			this.setRoom(this.data.getRooms().get(0));
+			this.setScreen(this.data.getScreens().get(0));
 		} catch (NullPointerException | IndexOutOfBoundsException exception) {
-			HelixException noRoomException = new NoDefaultRoomException(exception);
-			
 			this.dispose();
-			log.severe("Exiting with code: " + noRoomException.statusCode);
 			Gdx.app.exit();
+			throw new NoDefaultScreenException();
+			
 		}
 
 		this.start();
@@ -96,11 +95,15 @@ public abstract class BaseGame extends Game {
 		return data;
 	}
 
-	public void setRoom(Room room) {
-		super.setScreen(room);
+	public void setScreen(Screen screen) {
+		super.setScreen(screen);
 	}
 	
-	public void setRoom(Long roomId) {
-		this.setRoom(this.getData().getRoomById(roomId));
+	public void setScreen(Long screenId) {
+		this.setScreen(this.getData().getScreenById(screenId));
+	}
+
+	public void addScreen(Screen screen) {
+		this.data.addScreen(screen);
 	}
 }

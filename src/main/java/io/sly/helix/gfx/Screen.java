@@ -1,10 +1,10 @@
-package helix.gfx;
+package io.sly.helix.gfx;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 
-import helix.game.BaseGame;
-import helix.game.Data;
+import io.sly.helix.game.BaseGame;
+import io.sly.helix.game.Data;
 
 /**
  * Basic implementation of {@link ScreenAdapater}
@@ -12,7 +12,7 @@ import helix.game.Data;
  * @author Sly
  *
  */
-public abstract class Room extends ScreenAdapter {
+public abstract class Screen extends ScreenAdapter {
 	
 	// Screens are less dynamic than game object (or at least should be) 
 	// so we can treat them as such
@@ -22,13 +22,13 @@ public abstract class Room extends ScreenAdapter {
 	private boolean initialized = false;
 	
 	/**
-	 * Basic Step event of the screen. Called before {@link Room#draw}
+	 * Basic Step event of the screen. Called before {@link Screen#draw}
 	 * @param delta - Time since last update (seconds)
 	 */
 	protected abstract void step(float delta);
 	
 	/**
-	 * Basic Draw event of the screen. Called after {@link Room#step}
+	 * Basic Draw event of the screen. Called after {@link Screen#step}
 	 * @param delta - Time since last update (seconds)
 	 */
 	protected abstract void draw(float delta);
@@ -49,10 +49,9 @@ public abstract class Room extends ScreenAdapter {
 	 * Create a new Screen and link it to a {@link BaseGame}
 	 * @param game - Game to link to 
 	 */
-	public Room(BaseGame game) {
+	public Screen(BaseGame game) {
 		this.game = game;
 		this.data = game.getData();
-		this.data.addRoom(this);
 	}
 	
 	/**
@@ -88,11 +87,6 @@ public abstract class Room extends ScreenAdapter {
 	
 	public boolean isInitialized() {
 		return initialized;
-	}
-	
-	// TODO: Implement Current Room
-	public Room getCurrentRoom() {
-		return null;
 	}
 	
 	// TODO: Implement multiple cameras lol

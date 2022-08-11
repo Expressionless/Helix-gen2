@@ -1,4 +1,4 @@
-package helix.game;
+package io.sly.helix.game;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -10,11 +10,11 @@ import java.util.logging.Logger;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 
-import helix.annotations.QueueAsset;
-import helix.exception.HelixException;
-import helix.exception.res.ResourceNotFoundException;
-import helix.gfx.Room;
-import helix.utils.ClassUtils;
+import io.sly.helix.annotations.QueueAsset;
+import io.sly.helix.exception.HelixException;
+import io.sly.helix.exception.res.ResourceNotFoundException;
+import io.sly.helix.gfx.Screen;
+import io.sly.helix.utils.ClassUtils;
 
 public class Data {
 	public static final Logger log = Logger.getLogger(Data.class.getCanonicalName());
@@ -23,9 +23,9 @@ public class Data {
 	
 	private Camera currentCamera;
 	
-	private Room currentRoom;
+	private Screen currentScreen;
 	
-	private final List<Room> rooms = new ArrayList<>();	
+	private final List<Screen> screens = new ArrayList<>();	
 	
 	/**
 	 * An AssetManager to manage all assets
@@ -46,15 +46,15 @@ public class Data {
 	}
 
 	/**
-	 * Adds a Room to the list of rooms and returns the Room ID if successful
-	 * @param room - room to add
-	 * @return the ID of the room if successfully added. -1 if room was not succesfully added
+	 * Adds a Screen to the list of rooms and returns the Screen ID if successful
+	 * @param screen - screen to add
+	 * @return the ID of the screen if successfully added. -1 if screen was not succesfully added
 	 * 
-	 * @see {@link Room}
+	 * @see {@link Screen}
 	 */
-	public Integer addRoom(Room room) {
-		if(this.rooms.add(room)) {
-			return this.rooms.size() - 1;
+	public Integer addScreen(Screen screen) {
+		if(this.screens.add(screen)) {
+			return this.screens.size() - 1;
 		} else return -1;
 	}
 
@@ -132,8 +132,8 @@ public class Data {
 		return manager;
 	}
 
-	public List<Room> getRooms() {
-		return rooms;
+	public List<Screen> getScreens() {
+		return screens;
 	}
 	
 	
@@ -149,10 +149,10 @@ public class Data {
 
 
 	// TODO: Consider changing search algorithms? O(n) ain't pog
-	public Room getRoomById(Long id) {
-		for(Room room : rooms) {
-			if(room.id == id) {
-				return room;
+	public Screen getScreenById(Long id) {
+		for(Screen screen : screens) {
+			if(screen.id == id) {
+				return screen;
 			}
 		}
 		

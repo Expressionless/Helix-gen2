@@ -1,4 +1,4 @@
-package helix.annotations;
+package io.sly.helix.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

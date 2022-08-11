@@ -1,4 +1,4 @@
-package helix.utils.io;
+package io.sly.helix.utils.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import helix.Constants;
+import io.sly.helix.Constants;
 
 /**
  * Read in binary from a location
@@ -33,7 +33,7 @@ public class BinaryReader {
 	 * Read in the bytes from this file (relative to absolute directory)
 	 * @param filePath - Path of the file to read in
 	 * 
-	 * @see {@link helix.Constants#ABS_PATH}
+	 * @see {@link io.sly.helix.Constants#ABS_PATH}
 	 */
 	public BinaryReader(String filePath) {
 		this(filePath, true);
@@ -44,7 +44,7 @@ public class BinaryReader {
 	 * @param filePath - Path of the file to read in
 	 * @param relative - whether or not the file path is relative to the absolute directory
 	 * 
-	 * @see {@link helix.Constants#ABS_PATH}
+	 * @see {@link io.sly.helix.Constants#ABS_PATH}
 	 */
 	public BinaryReader(String filePath, boolean relative) {
 		this.bytes = new ArrayList<Byte>();

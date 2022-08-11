@@ -1,4 +1,4 @@
-package helix.utils;
+package io.sly.helix.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,6 +10,10 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ScanResult;
+
 /**
  * Generic Class Utilities
  * @author Sly
@@ -17,7 +21,6 @@ import java.util.logging.Logger;
  */
 public class ClassUtils {
 	public static final Logger log = Logger.getLogger(ClassUtils.class.getCanonicalName());
-	public static final String CLASS_PATH = new File("").getAbsolutePath() + "\\src\\main\\java";
 
 	public static Boolean inJarFile() {
 		try {
@@ -85,51 +88,30 @@ public class ClassUtils {
 	 * @return A set containing all classes found (recursive)
 	 */
 	public static Set<Class<?>> getClasses() {
-		return getClasses(CLASS_PATH);
+		return getClasses("io.sly");
 	}
 
-	public static Set<Class<?>> getClasses(String path) {
-		File currentDir = new File(path);
-		Set<String> classNameList = new HashSet<String>();
+	public static Set<Class<?>> getClasses(String packageName) {
+		
+		Set<Class<?>> classes = new HashSet<Class<?>>();
 
-		for (String p : currentDir.list())
-			classNameList.addAll(getClasses(classNameList, path + "\\" + p));
-
-		Set<Class<?>> classList = new HashSet<Class<?>>();
-		for (String className : classNameList) {
-			try {
-				classList.add(Class.forName(className));
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return classList;
-	}
-
-	private static Set<String> getClasses(Set<String> classesList, String path) {
-		File currentDir = new File(path);
-		if (!currentDir.exists()) {
-			System.err.println("Invalid path: " + path);
-			return classesList;
-		}
-
-		if (currentDir.isDirectory()) {
-			for (String p : currentDir.list()) {
-				File next = new File(path + "\\" + p);
-				if (next.isDirectory()) {
-					classesList.addAll(getClasses(classesList, path + "\\" + p));
-				} else {
-					classesList.add(getFullyQualifiedName(path + "\\" + p));
+		try (ScanResult scanResult = new ClassGraph()
+		.enableAnnotationInfo()
+		.enableClassInfo()
+		.acceptPackages(packageName)
+		.scan()) { // Start the scan
+			for (ClassInfo routeClassInfo : scanResult.getAllClasses()) {
+				try {
+					Class<?> clazzOf = Class.forName(routeClassInfo.getName());
+					classes.add(clazzOf);
+				} catch (ClassNotFoundException | SecurityException e) {
+					log.severe("Could not load class: " + routeClassInfo.getName());
 				}
 			}
-		} else if (!currentDir.isDirectory()) {
-			String qualifiedName = getFullyQualifiedName(currentDir.getAbsolutePath());
-			System.out.println("Adding: " + currentDir.getName());
-			classesList.add(qualifiedName);
 		}
 
-		return classesList;
+		log.info("Fetched " + classes.size() + " items");
+		return classes;
 	}
 
 	public static String getFullyQualifiedName(String path) {

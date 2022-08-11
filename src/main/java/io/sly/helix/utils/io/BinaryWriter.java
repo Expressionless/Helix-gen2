@@ -1,4 +1,4 @@
-package helix.utils.io;
+package io.sly.helix.utils.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Logger;
 
-import helix.Constants;
+import io.sly.helix.Constants;
 
 /**
  * Basic Binary file writer
