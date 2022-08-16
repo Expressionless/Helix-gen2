@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import io.sly.helix.Constants;
 import io.sly.helix.game.Data;
 import io.sly.helix.game.alarm.Alarm;
+import io.sly.helix.game.alarm.Event;
 import io.sly.helix.utils.math.Vector2D;
 
 /**
@@ -92,7 +93,7 @@ public abstract class GameObject {
 	 * Create a new GameObject
 	 * 
 	 * @param data - All the Game Data
-	 * @param pos  - {@link Point} to spawn the Object at
+	 * @param pos  - {@link Vector2D} to spawn the Object at
 	 */
 	public GameObject(Data data, Vector2D pos) {
 		if(freeIds.size() == 0) {
@@ -207,13 +208,13 @@ public abstract class GameObject {
 	}
 
 	/**
-	 * Move towards a {@link Point} at a given speed
+	 * Move towards a {@link Vector2D} at a given speed
 	 * 
-	 * @param point - Point to move towards
+	 * @param Vector2D - Vector2D to move towards
 	 * @param speed - Speed to move at (px/frame)
 	 */
-	public final void moveTo(Point point, float speed) {
-		this.direction = point.sub(this.getPos()).toVector2().getUnitVector();
+	public final void moveTo(Vector2D Vector2D, float speed) {
+		this.direction = Vector2D.sub(this.getPos()).getUnitVector();
 		this.move(speed);
 	}
 
@@ -228,12 +229,12 @@ public abstract class GameObject {
 	}
 
 	/**
-	 * Move towards a {@link Point} at {@link Constants#DEFAULT_SPEED}
+	 * Move towards a {@link Vector2D} at {@link Constants#DEFAULT_SPEED}
 	 * 
-	 * @param point - Point to move towards
+	 * @param Vector2D - Vector2D to move towards
 	 */
-	public final void moveTo(Point point) {
-		this.moveTo(point, Constants.DEFAULT_SPEED);
+	public final void moveTo(Vector2D Vector2D) {
+		this.moveTo(Vector2D, Constants.DEFAULT_SPEED);
 	}
 
 	/**
@@ -246,11 +247,11 @@ public abstract class GameObject {
 	}
 
 	// Getters and Setters
-	public Point getPos() {
+	public Vector2D getPos() {
 		return pos;
 	}
 
-	public final void setPos(Point other) {
+	public final void setPos(Vector2D other) {
 		this.pos = other.copy();
 	}
 

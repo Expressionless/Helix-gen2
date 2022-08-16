@@ -9,13 +9,18 @@ import java.util.logging.Logger;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import io.sly.helix.Constants;
 import io.sly.helix.annotations.QueueAsset;
 import io.sly.helix.exception.HelixException;
 import io.sly.helix.exception.res.ResourceNotFoundException;
 import io.sly.helix.game.entities.Entity;
 import io.sly.helix.game.entities.GameObject;
+import io.sly.helix.gfx.Animation;
 import io.sly.helix.gfx.Screen;
+import io.sly.helix.gfx.Sprite;
 import io.sly.helix.utils.ClassUtils;
 
 public class Data {
@@ -26,6 +31,8 @@ public class Data {
 	private Camera currentCamera;
 	
 	private Screen currentScreen;
+	
+	private final List<GameObject> persistentObjects = new ArrayList<>();;
 	
 	private final List<Screen> screens = new ArrayList<>();	
 	
@@ -47,6 +54,34 @@ public class Data {
 		this.game = game;
 	}
 
+	/**
+	 * Create a {@link Sprite}
+	 * 
+	 * @param spriteName - Name of the sprite to add
+	 * @param frameCount - no. of frames
+	 * @param animTime   - anim time (ms)
+	 * @return - a new {@link Sprite}
+	 */
+	public final Sprite createSprite(String spriteName, int frameCount, float animTime) {
+		Texture texture = manager.get(spriteName);
+		TextureRegion region = new TextureRegion(texture);
+		Animation anim = new Animation(region, spriteName, frameCount, animTime);
+		return new Sprite(anim);
+
+	}
+
+	/**
+	 * Create a {@link Sprite} with a single frame and no animation time
+	 * 
+	 * @param spriteName - Name of the sprite to add
+	 * @param frameCount - no. of frames
+	 * @param animTime   - anim time (ms)
+	 * @return - a new {@link Sprite}
+	 */
+	public final Sprite createSprite(String spriteName) {
+		return this.createSprite(spriteName, Constants.SINGLE_FRAME, Constants.NO_ANIM);
+	}
+	
 	/**
 	 * Adds a Screen to the list of rooms and returns the Screen ID if successful
 	 * @param screen - screen to add

@@ -87,11 +87,17 @@ public class Vector2D {
 	 * Calculate the length of this Vector2
 	 * @return length (double)
 	 */
-	public double length() {
+	public float length() {
 		double disX = Math.pow(this.x, 2);
 		double disY = Math.pow(this.y, 2);
 
-		return Math.pow(disX + disY, 0.5);
+		return (float)Math.pow(disX + disY, 0.5);
+	}
+	
+	public float getDistTo(Vector2D other) {
+		double disX = Math.pow(other.x - x, 2);
+		double disY = Math.pow(other.y - y, 2);
+		return (float)Math.pow(disX + disY, 0.5);
 	}
 
 	/*
@@ -152,14 +158,7 @@ public class Vector2D {
 	public Vector2D copy() {
 		return new Vector2D(x, y);
 	}
-	
-	/**
-	 * Return this Vector2 as {@link Point}
-	 */
-	public Point toPoint() {
-		return new Point(x, y);
-	}
-	
+		
 	// Getters and Setters
 	public float getX() {
 		return x;

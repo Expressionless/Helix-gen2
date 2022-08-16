@@ -3,12 +3,12 @@ package io.sly.helix.game.entities;
 import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import io.sly.helix.game.Data;
 import io.sly.helix.game.entities.collider.Collider;
+import io.sly.helix.gfx.Sprite;
 import io.sly.helix.utils.math.Vector2D;
 
 
@@ -103,7 +103,7 @@ public abstract class Entity extends GameObject {
 	}
 
 	/**
-	 * Add a spriter to the entity's spriteset
+	 * Add a sprite to the entity's spriteset
 	 * 
 	 * @param spriteName - Name of the sprite
 	 * @return - if the sprite was added successfully
