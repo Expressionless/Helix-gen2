@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.Camera;
 import io.sly.helix.annotations.QueueAsset;
 import io.sly.helix.exception.HelixException;
 import io.sly.helix.exception.res.ResourceNotFoundException;
+import io.sly.helix.game.entities.Entity;
+import io.sly.helix.game.entities.GameObject;
 import io.sly.helix.gfx.Screen;
 import io.sly.helix.utils.ClassUtils;
 
@@ -56,6 +58,22 @@ public class Data {
 		if(this.screens.add(screen)) {
 			return this.screens.size() - 1;
 		} else return -1;
+	}
+
+	
+	/**
+	 * Add a {@link GameObject} to the game data
+	 * @param object
+	 * @return true if the object was added, false if object is null
+	 * or if object was unable to be added to it's respective buffer
+	 */
+	public final Boolean addObject(GameObject object) {
+		if(object == null)
+			return false;
+		if(object instanceof Entity)
+			if(!this.entityBuffer.add((Entity) object))
+				return false;
+		return this.objectBuffer.add(object);
 	}
 
 	
