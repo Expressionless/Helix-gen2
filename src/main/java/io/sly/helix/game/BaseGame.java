@@ -25,6 +25,7 @@ public abstract class BaseGame extends Game {
 	 * Application dimensions
 	 */
 	public final int frameWidth, frameHeight;
+
 	
 	/**
 	 * Application title
@@ -42,6 +43,11 @@ public abstract class BaseGame extends Game {
 	 * Ran as the last thing to do on launch
 	 */
 	protected abstract void start();
+
+	/**
+	 * Ran after loading textures, before setting screen. Override as necessary
+	 */
+	protected void init() {}
 	
 	public BaseGame(String title, int frameWidth, int frameHeight) {
 		this.title = title;
@@ -77,7 +83,8 @@ public abstract class BaseGame extends Game {
 			exception.printException();
 			exception.terminateGame(this);
 		}
-		this.data.init();
+		
+		this.init();
 
 		try {
 			this.setScreen(this.data.getScreens().get(0));

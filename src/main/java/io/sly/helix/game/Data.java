@@ -21,9 +21,25 @@ import io.sly.helix.gfx.Animation;
 import io.sly.helix.gfx.Screen;
 import io.sly.helix.gfx.Sprite;
 import io.sly.helix.utils.ClassUtils;
+import io.sly.helix.utils.io.BinaryReader;
+import io.sly.helix.utils.io.BinaryWriter;
 
 public class Data {
-	public static final Logger log = Logger.getLogger(Data.class.getCanonicalName());
+	private static final Logger log = Logger.getLogger(Data.class.getCanonicalName());
+
+	/**
+	 * Read binary data with this. Call {@link BinaryWriter#close} when done writing
+	 */
+	protected BinaryReader reader;
+
+	/**
+	 * Write binary data with this Must call {@link BinaryWriter#close} when done
+	 * writing
+	 */
+	protected BinaryWriter writer;
+
+	private static Long ticks = 0L;
+
 
 	private final BaseGame game;
 	
@@ -39,15 +55,6 @@ public class Data {
 	 * An AssetManager to manage all assets
 	 */
 	private final AssetManager manager = new AssetManager();
-
-	/**
-	 * Called on creation of a new BaseGame<br>
-	 * Override as necessary
-	 * 
-	 * @see {@link BaseGame#create()}
-	 * @see {@link BaseGame}
-	 */
-	protected void init() {}
 	
 	public Data(BaseGame game) {
 		this.game = game;
@@ -179,10 +186,61 @@ public class Data {
 		}
 
 	}
+
+	/**
+	 * Begin Reading with the {@link Data#reader} and read in from a specified path
+	 * will return before reading if there is an instance of {@link Data#writer} or
+	 * {@link Data#reader} already.
+	 * 
+	 * @param path - path to read in from, relative to the absolute directory
+	 */
+	public final boolean beginReading(String path) {
+		if (writer != null)
+			return false;
+		if (reader != null)
+			return false;
+
+		reader = new BinaryReader(path);
+		return true;
+	}
+	/**
+	 * Stop reading from the {@link Data#reader}
+	 */
+	public final void stopReading() {
+		if (reader == null)
+			return;
+		reader = null;
+	}
+
+	/**
+	 * Begin writing to a file at some path with the {@link Data#writer} will return
+	 * early if already reading or writing.
+	 * 
+	 * @param path - path to write to
+	 */
+	public final void beginWriting(String path) {
+		if (writer != null)
+			return;
+		if (reader != null)
+			return;
+
+		writer = new BinaryWriter(path);
+	}
+
+	/**
+	 * Stop writing with the {@link Data#writer} and safely close the stream
+	 */
+	public final void stopWriting() {
+		if (writer == null)
+			return;
+
+		writer.close();
+		writer = null;
+	}
 	
 	// =============================== Getters and Setters =============================
 
-	
+
 	public AssetManager getManager() {
 		return manager;
 	}
@@ -222,5 +280,13 @@ public class Data {
 	
 	public BaseGame getGame() {
 		return game;
+	}
+
+	public BinaryReader getReader() {
+		return reader;
+	}
+
+	public Long getTicks() {
+		return ticks;
 	}
 }

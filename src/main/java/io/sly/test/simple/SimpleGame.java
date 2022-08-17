@@ -12,6 +12,11 @@ public class SimpleGame extends BaseGame {
 	}
 
 	@Override
+	public void init() {
+		
+	}
+
+	@Override
 	protected void start() {
 		System.out.println("Created BaseGame");
 	}
