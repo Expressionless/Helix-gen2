@@ -106,8 +106,6 @@ public abstract class GameObject {
 		this.data = data;
 		this.direction = new Vector2D(0, 0);
 		this.initAlarms();
-
-		data.addObject(this);
 	}
 
 	/**
@@ -153,7 +151,7 @@ public abstract class GameObject {
 	 * @return - the first instance of searchClass or null if none is found
 	 */
 	public final <T extends GameObject> T find(Class<T> searchClass) {
-		for (GameObject object : data.getObjects()) {
+		for (GameObject object : data.getCurrentObjects()) {
 			if (searchClass.isInstance(object))
 				return (T) object;
 		}
@@ -169,7 +167,7 @@ public abstract class GameObject {
 	 */
 	public final <T extends GameObject> T findNearest(Class<T> searchClass) {
 		GameObject current = null;
-		for (GameObject object : data.getObjects()) {
+		for (GameObject object : data.getCurrentObjects()) {
 			if (!searchClass.isInstance(object))
 				continue;
 			if (current == null) {

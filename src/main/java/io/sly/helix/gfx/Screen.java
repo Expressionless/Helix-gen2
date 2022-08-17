@@ -1,10 +1,14 @@
 package io.sly.helix.gfx;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 
 import io.sly.helix.game.BaseGame;
 import io.sly.helix.game.Data;
+import io.sly.helix.game.entities.GameObject;
 
 /**
  * Basic implementation of {@link ScreenAdapater}
@@ -20,6 +24,8 @@ public abstract class Screen extends ScreenAdapter {
 	public final Long id = ID_NEXT++;
 	
 	private boolean initialized = false;
+
+	private final List<GameObject> objects = new ArrayList<>();
 	
 	/**
 	 * Basic Step event of the screen. Called before {@link Screen#draw}
@@ -92,5 +98,13 @@ public abstract class Screen extends ScreenAdapter {
 	// TODO: Implement multiple cameras lol
 	public Camera getCurrentCamera() {
 		return getData().getCurrentCamera();
+	}
+
+	public List<GameObject> getObjects() {
+		return objects;
+	}
+
+	public boolean addObject(GameObject object) {
+		return getObjects().add(object);
 	}
 }

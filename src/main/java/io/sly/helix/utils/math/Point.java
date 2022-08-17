@@ -42,14 +42,6 @@ public class Point {
 		return new Point(this.x - other.x, this.y - other.y);
 	}
 	
-	/**
-	 * Subtract a Vector2 from this Point
-	 * @param other
-	 * @return - a new resultant point of the operation
-	 */
-	public Point sub(Vector2D other) {
-		return this.sub(other.toPoint()).copy();
-	}
 	
 	/**
 	 * Add a Point to this one

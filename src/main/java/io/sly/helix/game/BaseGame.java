@@ -91,6 +91,10 @@ public abstract class BaseGame extends Game {
 		this.start();
 	}
 	
+	public void setData(Data data) {
+		this.data = data;
+	}
+
 	public Data getData() {
 		return data;
 	}

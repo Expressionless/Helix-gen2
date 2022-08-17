@@ -16,7 +16,6 @@ import io.sly.helix.Constants;
 import io.sly.helix.annotations.QueueAsset;
 import io.sly.helix.exception.HelixException;
 import io.sly.helix.exception.res.ResourceNotFoundException;
-import io.sly.helix.game.entities.Entity;
 import io.sly.helix.game.entities.GameObject;
 import io.sly.helix.gfx.Animation;
 import io.sly.helix.gfx.Screen;
@@ -32,7 +31,7 @@ public class Data {
 	
 	private Screen currentScreen;
 	
-	private final List<GameObject> persistentObjects = new ArrayList<>();;
+	private final List<GameObject> globalObjects = new ArrayList<>();
 	
 	private final List<Screen> screens = new ArrayList<>();	
 	
@@ -99,16 +98,19 @@ public class Data {
 	/**
 	 * Add a {@link GameObject} to the game data
 	 * @param object
+	 * @param global whether or not to make this object global between screens
 	 * @return true if the object was added, false if object is null
 	 * or if object was unable to be added to it's respective buffer
 	 */
-	public final Boolean addObject(GameObject object) {
+	public final Boolean addObject(GameObject object, boolean global) {
 		if(object == null)
 			return false;
-		if(object instanceof Entity)
-			if(!this.entityBuffer.add((Entity) object))
-				return false;
-		return this.objectBuffer.add(object);
+		
+		if(global) {
+			return globalObjects.add(object);
+		}
+
+		return currentScreen.addObject(object);
 	}
 
 	
@@ -189,7 +191,13 @@ public class Data {
 		return screens;
 	}
 	
-	
+	public List<GameObject> getCurrentObjects() {
+		return currentScreen.getObjects();
+	}
+
+	public List<GameObject> getGlobalObjects() {
+		return globalObjects;
+	}
 	
 	public Camera getCurrentCamera() {
 		return currentCamera;
@@ -212,5 +220,7 @@ public class Data {
 		return null;
 	}
 	
-	
+	public BaseGame getGame() {
+		return game;
+	}
 }
