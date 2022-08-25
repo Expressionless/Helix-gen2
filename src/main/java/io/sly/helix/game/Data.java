@@ -10,7 +10,9 @@ import java.util.logging.Logger;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.sly.helix.Constants;
 import io.sly.helix.annotations.QueueAsset;
@@ -49,7 +51,12 @@ public class Data {
 	
 	private final List<GameObject> globalObjects = new ArrayList<>();
 	
-	private final List<Screen> screens = new ArrayList<>();	
+	private final List<Screen> screens = new ArrayList<>();
+
+	/**
+	 * Main Viewport in the application
+	 */
+	private Viewport viewport;
 	
 	/**
 	 * An AssetManager to manage all assets
@@ -188,6 +195,75 @@ public class Data {
 	}
 
 	/**
+	 * Override this as necessary. Gets called at the end of
+	 * {@link Data#update(float)}
+	 * 
+	 * @param delta - Time since last frame (seconds)
+	 */
+	protected void step(float delta) {
+	};
+
+	/**
+	 * Main update loop. Dispose of all entities that need disposing and then sort
+	 * entities by {@link Entity#getDepth} Finally, update all objects and then run
+	 * {@link Data#step}
+	 * 
+	 * @param delta - Time since last frame (seconds)
+	 */
+	public final void update(float delta) {
+		ticks++;
+
+		// this.disposeCore();
+
+		// entities.sort(new Comparator<Entity>() {
+
+		// 	public int compare(Entity e1, Entity e2) {
+		// 		return (int) Math.signum(e2.getDepth() - e1.getDepth());
+		// 	}
+
+		// });
+
+		// if (this.objectBuffer.size() > 0) {
+		// 	this.objects.addAll(objectBuffer);
+		// 	this.objectBuffer.clear();
+		// }
+
+		// for (GameObject object : objects) {
+		// 	object.updateAlarms(delta);
+		// 	object.update(delta);
+		// }
+
+		this.step(delta);
+	}
+
+	/**
+	 * Gets called at end of {@link Data#render} Override as necessary to draw extra
+	 * things through any abstract implementation of this class
+	 * 
+	 * @param batch - {@link SpriteBatch} to draw with
+	 */
+	protected void draw(SpriteBatch batch) {
+	};
+
+	/**
+	 * Render every entity that needs rendering and then call {@link Data#draw}
+	 * 
+	 * @param batch - {@link SpriteBatch} to draw with
+	 */
+	public final void render(SpriteBatch batch) {
+		// if (this.entityBuffer.size() > 0) {
+		// 	this.entities.addAll(this.entityBuffer);
+		// 	this.entityBuffer.clear();
+		// }
+		
+		// for (Entity entity : entities) {
+		// 	entity.render(batch);
+		// }
+		
+		this.draw(batch);
+	}
+
+	/**
 	 * Begin Reading with the {@link Data#reader} and read in from a specified path
 	 * will return before reading if there is an instance of {@link Data#writer} or
 	 * {@link Data#reader} already.
@@ -266,6 +342,30 @@ public class Data {
 		this.currentCamera = currentCamera;
 	}
 
+	public Screen getCurrentScreen() {
+		return this.currentScreen;
+	}
+
+	public Screen setCurrentScreen(int id) {
+		Screen s = this.getScreens().get(id);
+		if(s != null)
+			setCurrentScreen(s);
+		return s;
+	}
+
+	public Screen getScreen(int id) {
+		Screen s = this.getScreens().get(id);
+		if(s == null) {
+			log.severe("Could not find screen with id: " + id);
+		}
+
+		return s;
+	}
+
+	public void setCurrentScreen(Screen screen) {
+		this.currentScreen = screen;
+	}
+
 
 	// TODO: Consider changing search algorithms? O(n) ain't pog
 	public Screen getScreenById(Long id) {
@@ -277,6 +377,15 @@ public class Data {
 		
 		return null;
 	}
+
+	public final Viewport getViewport() {
+		return viewport;
+	}
+
+	public final void setViewport(Viewport viewport) {
+		this.viewport = viewport;
+	}
+
 	
 	public BaseGame getGame() {
 		return game;

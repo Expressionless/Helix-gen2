@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
@@ -97,6 +98,10 @@ public abstract class BaseGame extends Game {
 
 		this.start();
 	}
+
+	public Long getTicks() {
+		return getData().getTicks();
+	}
 	
 	public void setData(Data data) {
 		this.data = data;
@@ -116,5 +121,9 @@ public abstract class BaseGame extends Game {
 
 	public void addScreen(Screen screen) {
 		this.data.addScreen(screen);
+	}
+
+	public Camera getCurrentCamera() {
+		return getData().getCurrentCamera();
 	}
 }
