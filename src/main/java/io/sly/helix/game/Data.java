@@ -108,6 +108,9 @@ public class Data {
 	 * @see {@link Screen}
 	 */
 	public Integer addScreen(Screen screen) {
+		if(this.currentScreen == null) {
+			this.currentScreen = screen;
+		}
 		if(this.screens.add(screen)) {
 			return this.screens.size() - 1;
 		} else return -1;
