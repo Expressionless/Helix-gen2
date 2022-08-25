@@ -3,7 +3,7 @@ package io.sly.helix.exception;
 import org.jboss.logging.Logger;
 
 public class HelixException extends Exception implements HelixExceptionIntf {
-	private static final Logger logger = Logger.getLogger(HelixException.class);
+	protected static final Logger log = Logger.getLogger(HelixException.class);
 	
 	public final Integer statusCode;
 	
@@ -39,6 +39,6 @@ public class HelixException extends Exception implements HelixExceptionIntf {
 
 	@Override
 	public Logger getLogger() {
-		return logger;
+		return log;
 	}
 }

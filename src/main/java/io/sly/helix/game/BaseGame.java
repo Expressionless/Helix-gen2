@@ -50,12 +50,12 @@ public abstract class BaseGame extends Game {
 	 */
 	protected void init() {}
 	
-	public BaseGame(String title, int frameWidth, int frameHeight) {
+	public BaseGame(String rootPackage, String title, int frameWidth, int frameHeight) {
 		this.title = title;
 		this.frameWidth = frameWidth;
 		this.frameHeight = frameHeight;
 		
-		this.data = new Data(this);
+		this.data = new Data(this, rootPackage);
 		
 		fps = new FPSLogger();
 		

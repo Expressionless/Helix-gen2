@@ -8,7 +8,7 @@ import io.sly.test.simple.screens.MainScreen;
 public class SimpleGame extends BaseGame {
 
 	public SimpleGame() {
-		super("Simple Test", 720, 480);
+		super("io.sly", "Simple Test", 720, 480);
 	}
 
 	@Override

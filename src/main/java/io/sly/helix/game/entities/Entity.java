@@ -2,9 +2,7 @@ package io.sly.helix.game.entities;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import io.sly.helix.game.Data;
 import io.sly.helix.game.entities.collider.Collider;
@@ -20,8 +18,6 @@ import io.sly.helix.utils.math.Vector2D;
  *
  */
 public abstract class Entity extends GameObject {
-	public static final BitmapFont font = new BitmapFont();
-	public static final ShapeRenderer renderer = new ShapeRenderer();
 	
 	/**
 	 * Depth to render entity at (less depth means entity is rendered more towards

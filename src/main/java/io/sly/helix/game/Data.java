@@ -5,7 +5,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
+
+import org.jboss.logging.Logger;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
@@ -28,6 +29,9 @@ import io.sly.helix.utils.io.BinaryWriter;
 
 public class Data {
 	private static final Logger log = Logger.getLogger(Data.class.getCanonicalName());
+	private static final String ABS_PATH = new File("").getAbsolutePath() + "/";
+
+	private final String rootPackage;
 
 	/**
 	 * Read binary data with this. Call {@link BinaryWriter#close} when done writing
@@ -63,8 +67,9 @@ public class Data {
 	 */
 	private final AssetManager manager = new AssetManager();
 	
-	public Data(BaseGame game) {
+	public Data(BaseGame game, String rootPackage) {
 		this.game = game;
+		this.rootPackage = rootPackage;
 	}
 
 	/**
@@ -133,39 +138,25 @@ public class Data {
 	 */
 	public void loadTextures() throws HelixException {
 		// Queue Resources
-		Set<Class<?>> classes = null;
-		Boolean isJarFile = ClassUtils.inJarFile();
-		if(isJarFile) {
-			try {
-				classes = ClassUtils.getClassesFromJarFile();
-				if(classes == null)
-					classes = ClassUtils.getClasses();
-			} catch (Exception e) {
-				System.err.println("Failed to get Jar File");
-				e.printStackTrace();
-				System.exit(-1);
-			}
-		} else {
-			classes = ClassUtils.getClasses();
-		}
-
+		Set<Class<?>> classes = ClassUtils.getClasses(rootPackage);
 		QueueAsset queueAnnotation;
 		Object fieldObject;
 		File targetFile;
 		
 		for (Class<?> clazz : classes) {
 			for (Field texField : clazz.getFields()) {
+				
 				if (!texField.isAnnotationPresent(QueueAsset.class))
 					continue;
 				
 				queueAnnotation = texField.getAnnotation(QueueAsset.class);
 
-				targetFile = new File(queueAnnotation.ref());
+				targetFile = new File(ABS_PATH + queueAnnotation.ref());
 				if(!targetFile.exists() || targetFile.isDirectory()) {
 					if(targetFile.isDirectory()) {
-						log.severe("Target File is directory: " + queueAnnotation.ref());
+						log.error("Target File is directory: " + queueAnnotation.ref());
 					}
-					throw new ResourceNotFoundException(queueAnnotation.ref());
+					throw new ResourceNotFoundException(ABS_PATH + queueAnnotation.ref());
 				}
 				
 				// Attempt to set the texture field to the new value
@@ -183,12 +174,14 @@ public class Data {
 		log.info("Queued " + this.getManager().getQueuedAssets() + " assets to load");
 		float progress = 0, lastProgress = 0;
 		// Load Resources
-		while (!this.getManager().update()) {
-			// Check if progress got updated
-			progress = this.getManager().getProgress();
-			if (progress != lastProgress) {
-				log.info("loading: " + this.getManager().getProgress());
-				lastProgress = progress;
+		if(this.getManager().getQueuedAssets() > 0) {
+			while (!this.getManager().update()) {
+				// Check if progress got updated
+				progress = this.getManager().getProgress();
+				if (progress != lastProgress) {
+					log.info("loading: " + this.getManager().getProgress());
+					lastProgress = progress;
+				}
 			}
 		}
 
@@ -356,7 +349,7 @@ public class Data {
 	public Screen getScreen(int id) {
 		Screen s = this.getScreens().get(id);
 		if(s == null) {
-			log.severe("Could not find screen with id: " + id);
+			log.error("Could not find screen with id: " + id);
 		}
 
 		return s;

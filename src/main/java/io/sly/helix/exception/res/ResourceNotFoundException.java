@@ -11,7 +11,7 @@ public class ResourceNotFoundException extends ResourceException {
 
 	public ResourceNotFoundException(String path) {
 		super(Constants.ERR_RES_NOT_FOUND, path, null);
-		System.err.println("Resource not found at path: " + path);
+		log.error("Resource not found at path: " + path);
 	}
 
 }
