@@ -1,13 +1,7 @@
 package io.sly.helix.utils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import org.jboss.logging.Logger;
 
@@ -32,6 +26,19 @@ public class ClassUtils {
 		return getClasses("io.sly");
 	}
 
+	/**
+	 * Get the class simple name of an object
+	 * @param o
+	 * @return
+	 */
+	public static String getClassName(Object o) {
+		String str = o.getClass().getSimpleName();
+		int index = str.indexOf('_');
+		if(index != -1)
+			str = str.substring(0, index);
+		return str;
+	}
+
 	public static Set<Class<?>> getClasses(String packageName) {
 		log.info("Looking in: " + packageName);
 		Set<Class<?>> classes = new HashSet<Class<?>>();
@@ -53,17 +60,5 @@ public class ClassUtils {
 
 		log.info("Fetched " + classes.size() + " items");
 		return classes;
-	}
-
-	public static String getFullyQualifiedName(String path) {
-		
-		String identifier = "src\\main\\java";
-		int index = path.indexOf(identifier);
-
-		// Remove everything before incl. "java/" and then remove ".java" from the end
-		path = path.substring(index)
-					.substring(identifier.length())
-					.replaceAll("\\\\", ".");
-		return path.substring(1, path.length() - 5);
 	}
 }

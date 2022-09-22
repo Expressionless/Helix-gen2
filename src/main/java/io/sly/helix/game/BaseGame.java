@@ -1,6 +1,6 @@
 package io.sly.helix.game;
 
-import java.util.logging.Logger;
+import org.jboss.logging.Logger;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -44,16 +44,13 @@ public abstract class BaseGame extends Game {
 	 * Ran as the last thing to do on launch
 	 */
 	protected abstract void start();
-
-	/**
-	 * Ran after loading textures, before setting screen. Override as necessary
-	 */
-	protected void init() {}
 	
 	public BaseGame(String rootPackage, String title, int frameWidth, int frameHeight) {
 		this.title = title;
 		this.frameWidth = frameWidth;
 		this.frameHeight = frameHeight;
+		
+		log.info(frameWidth + "x" + frameHeight);
 		
 		this.data = new Data(this, rootPackage);
 		
@@ -69,31 +66,47 @@ public abstract class BaseGame extends Game {
 		config.useVsync(true);
 		config.setResizable(false);
 	}
+
+	/**
+	 * Ran before loading textures. Override as neccessary
+	 * Default implementation:
+	 * <ul>
+	 * 	<li>Finish loading queued assets</li>
+	 * 	<li>Create a new {@link OrthographicCamera} as the default camera</li>
+	 * </ul>
+	 * 
+	 * @see {@link OrthographicCamera}
+	 */
+	protected void preLoad() {
+		this.data.setCurrentCamera(new OrthographicCamera());
+	}
+
+	/**
+	 * Ran after loading textures, before setting screen. Override as necessary
+	 */
+	protected void init() {}
 	
 	@Override
 	public final void create() {
 
 		// Load loading screen stuff
-		this.data.getManager().finishLoading();
-		this.data.setCurrentCamera(new OrthographicCamera());
-
+		preLoad();
 		try {
-			this.data.loadTextures();
+			this.getData().queueAllTextures();
 		} catch(HelixException exception) {
 			System.err.println("Texture Loading error!");
 			exception.printException();
 			exception.terminateGame(this);
 		}
-		
 		this.init();
 
 		try {
-			this.setScreen(this.data.getScreens().get(0));
+			if(this.getData().getCurrentScreen() == null)
+				this.setScreen(this.data.getScreens().get(0));
 		} catch (NullPointerException | IndexOutOfBoundsException exception) {
 			this.dispose();
 			Gdx.app.exit();
 			throw new NoDefaultScreenException();
-			
 		}
 
 		this.start();
@@ -111,8 +124,9 @@ public abstract class BaseGame extends Game {
 		return data;
 	}
 
-	public void setScreen(Screen screen) {
+	private void setScreen(Screen screen) {
 		super.setScreen(screen);
+		getData().setCurrentScreen(screen);
 	}
 	
 	public void setScreen(Long screenId) {

@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.Game;
 
 import io.sly.helix.Constants;
 import io.sly.helix.annotations.QueueAsset;
@@ -53,6 +54,9 @@ public class Data {
 	
 	private Screen currentScreen;
 	
+	private double loadProgress;
+	private boolean finishedLoading = false;
+
 	private final List<GameObject> globalObjects = new ArrayList<>();
 	
 	private final List<Screen> screens = new ArrayList<>();
@@ -109,7 +113,7 @@ public class Data {
 	 */
 	public Integer addScreen(Screen screen) {
 		if(this.currentScreen == null) {
-			this.currentScreen = screen;
+			this.setCurrentScreen(screen);
 		}
 		if(this.screens.add(screen)) {
 			return this.screens.size() - 1;
@@ -139,7 +143,7 @@ public class Data {
 	/**
 	 * Load all assets into the game
 	 */
-	public void loadTextures() throws HelixException {
+	public void queueAllTextures() throws HelixException {
 		// Queue Resources
 		Set<Class<?>> classes = ClassUtils.getClasses(rootPackage);
 		QueueAsset queueAnnotation;
@@ -173,21 +177,33 @@ public class Data {
 				this.getManager().load(queueAnnotation.ref(), queueAnnotation.type());
 			}
 		}
+	}
 
+	public boolean loadNextAsset() {
+		if(this.getManager().update())
+			return true;
+		
+		loadProgress = this.getManager().getProgress();
+		return false;
+	}
+
+	public void loadTextures() {
 		log.info("Queued " + this.getManager().getQueuedAssets() + " assets to load");
-		float progress = 0, lastProgress = 0;
 		// Load Resources
 		if(this.getManager().getQueuedAssets() > 0) {
-			while (!this.getManager().update()) {
-				// Check if progress got updated
-				progress = this.getManager().getProgress();
-				if (progress != lastProgress) {
-					log.info("loading: " + this.getManager().getProgress());
-					lastProgress = progress;
-				}
+			boolean finishedLoading = false;
+			while (!finishedLoading) {
+				finishedLoading = loadNextAsset();
+				// // Check if progress got updated
+				// progress = this.getManager().getProgress();
+				// if (progress != lastProgress) {
+				// 	log.info("loading: " + this.getManager().getProgress());
+				// 	lastProgress = progress;
+				// }
 			}
-		}
 
+			finishedLoading = true;
+		}
 	}
 
 	/**
@@ -349,6 +365,18 @@ public class Data {
 		return s;
 	}
 
+	public Screen goToNextScreen() {
+		int currentScreenId = currentScreen.getId();
+		Screen next = getScreen(currentScreenId + 1);
+		
+		// Loop
+		if(next == null) {
+			log.error("Could not find with screen with id of: " + (currentScreenId + 1));
+			next = getScreen(0);
+		}
+		return setCurrentScreen(next);
+	}
+
 	public Screen getScreen(int id) {
 		Screen s = this.getScreens().get(id);
 		if(s == null) {
@@ -358,15 +386,18 @@ public class Data {
 		return s;
 	}
 
-	public void setCurrentScreen(Screen screen) {
+	public Screen setCurrentScreen(Screen screen) {
+		log.info("Showing: " + ClassUtils.getClassName(screen));
 		this.currentScreen = screen;
+		((Game)this.getGame()).setScreen(screen);
+		return this.currentScreen;
 	}
 
 
 	// TODO: Consider changing search algorithms? O(n) ain't pog
 	public Screen getScreenById(Long id) {
 		for(Screen screen : screens) {
-			if(screen.id == id) {
+			if(screen.getId() == id) {
 				return screen;
 			}
 		}
@@ -393,5 +424,9 @@ public class Data {
 
 	public Long getTicks() {
 		return ticks;
+	}
+
+	public boolean hasFinishedLoading() {
+		return finishedLoading;
 	}
 }

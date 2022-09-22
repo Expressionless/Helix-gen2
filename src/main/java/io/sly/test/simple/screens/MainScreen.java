@@ -8,7 +8,7 @@ import io.sly.helix.gfx.Screen;
 public class MainScreen extends Screen {
 
 	public MainScreen(BaseGame game) {
-		super(game);
+		super(game, 0);
 	}
 
 	@Override
