@@ -358,7 +358,7 @@ public class Data {
 		return this.currentScreen;
 	}
 
-	public Screen setCurrentScreen(int id) {
+	Screen setCurrentScreen(int id) {
 		Screen s = this.getScreens().get(id);
 		if(s != null)
 			setCurrentScreen(s);
@@ -386,7 +386,7 @@ public class Data {
 		return s;
 	}
 
-	public Screen setCurrentScreen(Screen screen) {
+	Screen setCurrentScreen(Screen screen) {
 		log.info("Showing: " + ClassUtils.getClassName(screen));
 		this.currentScreen = screen;
 		((Game)this.getGame()).setScreen(screen);

@@ -88,16 +88,23 @@ public class Vector2D {
 	 * @return length (double)
 	 */
 	public float length() {
+		return (float)Math.pow(lengthSq(), 0.5);
+	}
+
+	public float lengthSq() {
 		double disX = Math.pow(this.x, 2);
 		double disY = Math.pow(this.y, 2);
-
-		return (float)Math.pow(disX + disY, 0.5);
+		return (float)(disX + disY);
 	}
 	
-	public float getDistTo(Vector2D other) {
+	public float getDistToSq(Vector2D other) {
 		double disX = Math.pow(other.x - x, 2);
 		double disY = Math.pow(other.y - y, 2);
-		return (float)Math.pow(disX + disY, 0.5);
+		return (float)(disX + disY);
+	}
+
+	public float getDistTo(Vector2D other) {
+		return (float)Math.pow(getDistToSq(other), 0.5);
 	}
 
 	/*
@@ -146,8 +153,6 @@ public class Vector2D {
 			return new Vector2D(0 ,0);
 		
 		vector = new Vector2D(vector.getX() / mag, vector.getY() / mag);
-		if((int)Math.round(vector.length()) != 1)
-			System.err.println("BAD UNIT VECTOR OF: " + vector.toString());
 		return vector;
 	}
 

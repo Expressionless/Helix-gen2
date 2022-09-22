@@ -76,7 +76,7 @@ public abstract class GameObject {
 	 * 
 	 * @see {@link GameObject#preStep}, {@link GameObject#postStep}
 	 */
-	public abstract void step(float delta);
+	protected abstract void step(float delta);
 
 	/**
 	 * To be overridden as necessary. Called after {@link GameObject#step} <br>

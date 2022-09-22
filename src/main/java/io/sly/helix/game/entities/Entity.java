@@ -191,11 +191,12 @@ public abstract class Entity extends GameObject {
 		if (!this.sprites.containsKey(spriteName))
 			this.addSprite(spriteName);
 		if (this.currentSprite == null || !this.currentSprite.equals(sprites.get(spriteName)))
-			this.currentSprite = sprites.get(spriteName);
+			this.setSprite(sprites.get(spriteName));
 	}
 
 	public final void setSprite(Sprite s) {
-		sprites.put(s.getName(), s);
+		// sprites.put(s.getName(), s);
+		log.info("setting sprite to: " + s.getName());
 		this.currentSprite = s;
 	}
 

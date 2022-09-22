@@ -91,6 +91,7 @@ public abstract class BaseGame extends Game {
 
 		// Load loading screen stuff
 		preLoad();
+		
 		try {
 			this.getData().queueAllTextures();
 		} catch(HelixException exception) {
@@ -98,6 +99,7 @@ public abstract class BaseGame extends Game {
 			exception.printException();
 			exception.terminateGame(this);
 		}
+
 		this.init();
 
 		try {
