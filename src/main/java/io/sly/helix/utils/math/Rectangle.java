@@ -25,14 +25,6 @@ public class Rectangle extends com.badlogic.gdx.math.Rectangle {
 	private static final long serialVersionUID = -2175678676093573672L;
 
 	/**
-	 * Check if this Rectangle contains some {@link Point}
-	 * @return Whether or not this Rectangle contains some Point
-	 */
-	public boolean contains(Point p) {
-		return this.contains(new Vector2D(p.getX(), p.getY()));
-	}
-
-	/**
 	 * Check if this Rectangle contains some {@link Vector2D}
 	 * @return Whether or not this Rectangle contains some Vector2
 	 */

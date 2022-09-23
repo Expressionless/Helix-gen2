@@ -131,10 +131,6 @@ public abstract class BaseGame extends Game {
 		getData().setCurrentScreen(screen);
 	}
 	
-	public void setScreen(Long screenId) {
-		this.setScreen(this.getData().getScreenById(screenId));
-	}
-
 	public void addScreen(Screen screen) {
 		this.data.addScreen(screen);
 	}

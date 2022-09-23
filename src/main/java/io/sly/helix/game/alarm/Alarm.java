@@ -57,8 +57,11 @@ public final class Alarm {
 	 */
 	public void update(float delta) {
 		if(ms >= 1000f) {
-			if(timer > 0)
+			System.out.println("Checking the need to tick: " + ms);
+			if(timer > 0) {
+				System.out.println("Ticking");
 				timer--;
+			}
 			if (timer == 0) {
 				action.event();
 				timer = NO_ALARM;
@@ -89,6 +92,7 @@ public final class Alarm {
 	public void setAlarm(int timer, Event action) {
 		this.action = action;
 		this.setTimer(timer);
+		System.out.println("Timer: " + timer + ": " + (action != null));
 	}
 	
 	/**

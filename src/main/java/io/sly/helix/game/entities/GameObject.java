@@ -126,6 +126,7 @@ public abstract class GameObject {
 	 * @param delta - Time since last frame (seconds)
 	 */
 	public final void update(float delta) {
+		updateAlarms(delta);
 		preStep(delta);
 		step(delta);
 		postStep(delta);
@@ -136,7 +137,7 @@ public abstract class GameObject {
 	 * 
 	 * @param delta - Time since last frame (seconds)
 	 */
-	public final void updateAlarms(float delta) {
+	private final void updateAlarms(float delta) {
 		for (Alarm alarm : alarm) {
 			alarm.update(delta);
 		}

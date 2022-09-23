@@ -393,18 +393,6 @@ public class Data {
 		return this.currentScreen;
 	}
 
-
-	// TODO: Consider changing search algorithms? O(n) ain't pog
-	public Screen getScreenById(Long id) {
-		for(Screen screen : screens) {
-			if(screen.getId() == id) {
-				return screen;
-			}
-		}
-		
-		return null;
-	}
-
 	public final Viewport getViewport() {
 		return viewport;
 	}

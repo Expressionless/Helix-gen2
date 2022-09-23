@@ -195,8 +195,6 @@ public abstract class Entity extends GameObject {
 	}
 
 	public final void setSprite(Sprite s) {
-		// sprites.put(s.getName(), s);
-		log.info("setting sprite to: " + s.getName());
 		this.currentSprite = s;
 	}
 
