@@ -26,8 +26,6 @@ public abstract class GameObject {
 	 * Next ID to be assigned
 	 */
 	private static Long ID_NEXT = 0L;
-	
-	//TODO: Tossing up whether or not I really want this system
 	private static final List<Long> freeIds = new ArrayList<>();
 	/**
 	 * ID of the object
@@ -38,12 +36,6 @@ public abstract class GameObject {
 	 * Alarms to be used for timed events
 	 */
 	private Alarm[] alarm;
-
-	/**
-	 * Whether or not this object should be disposed
-	 */
-	private boolean shouldDispose;
-
 	/**
 	 * Position of the object
 	 */
@@ -275,21 +267,13 @@ public abstract class GameObject {
 		return ("GameObject [pos=" + pos.toString() + ", " + "direction=" + direction.toString() + ", " + "]");
 	}
 
-	public final boolean willDispose() {
-		return shouldDispose;
-	}
-
 	/**
 	 * Free up global variables such as IDs here
 	 */
-	final void dispose() {
+	public final void dispose() {
 		freeIds.add(this.id);
 	}
 	
-	public final void queueDispose() {
-		shouldDispose = true;
-	}
-
 	public final Data getData() {
 		return data;
 	}
