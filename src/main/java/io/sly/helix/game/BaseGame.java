@@ -35,7 +35,7 @@ public abstract class BaseGame extends Game {
 	
 	/**
 	 * Application's data object. Keeps track of all the
-	 * {@link helix.game.GameObject}s and {@link helix.game.objects.Entity}s and
+	 * {@link helix.game.GameObject}s and {@link HelixEntity.game.objects.Entity}s and
 	 * such
 	 */
 	private Data data;

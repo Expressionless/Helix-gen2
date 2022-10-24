@@ -1,1 +1,9 @@
 /target/
+**/*.settings
+*.jar
+**/*.project
+.vscode
+**/*.classpath
+.project
+.settings
+/.settings

@@ -17,7 +17,7 @@ import io.sly.helix.utils.math.Vector2D;
  * @author Sly
  *
  */
-public abstract class Entity extends GameObject {
+public abstract class HelixEntity extends GameObject {
 	
 	/**
 	 * Depth to render entity at (less depth means entity is rendered more towards
@@ -45,7 +45,7 @@ public abstract class Entity extends GameObject {
 	 * @param data - {@link helix.game.Data}
 	 * @param pos
 	 */
-	public Entity(Data data, Vector2D pos) {
+	public HelixEntity(Data data, Vector2D pos) {
 		super(data, pos);
 
 		this.sprites = new HashMap<String, Sprite>();
@@ -128,13 +128,13 @@ public abstract class Entity extends GameObject {
 
 	@SuppressWarnings("unchecked")
 	/**
-	 * Find another the first occurrence of a specified {@link Entity}
+	 * Find another the first occurrence of a specified {@link HelixEntity}
 	 * 
-	 * @param <T>         - Some class that extends {@link Entity}
+	 * @param <T>         - Some class that extends {@link HelixEntity}
 	 * @param searchClass - The class of the instance to be found
 	 * @return - an instance of the searchClass type. Null if none exist
 	 */
-	public final <T extends Entity> T findEntity(Class<T> searchClass) {
+	public final <T extends HelixEntity> T findEntity(Class<T> searchClass) {
 		for (GameObject object : this.getData().getCurrentObjects()) {
 			if (searchClass.isInstance(object))
 				return (T) object;
@@ -144,13 +144,13 @@ public abstract class Entity extends GameObject {
 
 	@SuppressWarnings("unchecked")
 	/**
-	 * Find the nearest instance of a specified class that extends {@link Entity}
+	 * Find the nearest instance of a specified class that extends {@link HelixEntity}
 	 * 
-	 * @param <T>         - Some class that extends {@link Entity}
+	 * @param <T>         - Some class that extends {@link HelixEntity}
 	 * @param searchClass - The class of the instance to be found
 	 * @return - the nearest instance of the searchClass type. Null if none exist
 	 */
-	public final <T extends Entity> T findNearestEntity(Class<T> searchClass) {
+	public final <T extends HelixEntity> T findNearestEntity(Class<T> searchClass) {
 		GameObject current = null;
 		for (GameObject object : this.getData().getCurrentObjects()) {
 			if (!searchClass.isInstance(object))

@@ -2,6 +2,8 @@ package io.sly.helix.utils.math;
 
 import java.text.DecimalFormat;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * A 2 Dimensional Vector class with some basic operations
  * @author Sly
@@ -179,6 +181,14 @@ public class Vector2D {
 
 	public void setY(float y) {
 		this.y = y;
+	}
+
+	public Vector2 toVector2() {
+		return new Vector2(x, y);
+	}
+
+	public static Vector2D fromVector2(Vector2 vector) {
+		return new Vector2D(vector.x, vector.y);
 	}
 
 	@Override

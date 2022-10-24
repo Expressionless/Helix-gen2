@@ -217,7 +217,7 @@ public class Data {
 
 	/**
 	 * Main update loop. Dispose of all entities that need disposing and then sort
-	 * entities by {@link Entity#getDepth} Finally, update all objects and then run
+	 * entities by {@link HelixEntity#getDepth} Finally, update all objects and then run
 	 * {@link Data#step}
 	 * 
 	 * @param delta - Time since last frame (seconds)

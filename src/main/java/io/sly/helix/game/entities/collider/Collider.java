@@ -1,6 +1,6 @@
 package io.sly.helix.game.entities.collider;
 
-import io.sly.helix.game.entities.Entity;
+import io.sly.helix.game.entities.HelixEntity;
 import io.sly.helix.utils.math.Vector2D;
 
 /**
@@ -23,7 +23,7 @@ public final class Collider extends io.sly.helix.utils.math.Rectangle {
 	 * dimensions
 	 * @param entity
 	 */
-	public Collider(Entity entity) {
+	public Collider(HelixEntity entity) {
 		this(entity, ColliderOffset.TOP_LEFT);
 	}
 	
@@ -32,9 +32,9 @@ public final class Collider extends io.sly.helix.utils.math.Rectangle {
 	 * @param entity - Entity to attach Collider to
 	 * @param offsetType - ColliderOffset to use
 	 * 
-	 * @see {@link Entity}, {@link ColliderOffset}
+	 * @see {@link HelixEntity}, {@link ColliderOffset}
 	 */
-	public Collider(Entity entity, ColliderOffset offsetType) {
+	public Collider(HelixEntity entity, ColliderOffset offsetType) {
 		super(entity.getPos().getX(), entity.getPos().getY(), entity.getWidth(), entity.getHeight());
 		offset = new Vector2D(0, 0);
 		
