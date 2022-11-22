@@ -1,7 +1,5 @@
 package io.sly.helix.utils.math;
 
-import java.text.DecimalFormat;
-
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -10,8 +8,6 @@ import com.badlogic.gdx.math.Vector2;
  *
  */
 public class Vector2D {
-	private static final DecimalFormat df = new DecimalFormat("0.00");
-
 	/**
 	 * Dimensions
 	 */
@@ -113,7 +109,7 @@ public class Vector2D {
 	 * Get the angle of this Vector2 in degrees,
 	 * relative to the positive x axis
 	 */
-	public double getAngle() {
+	public float getAngle() {
 		double angle = 0;
 		double sin = 0,
 			   asin = 0,
@@ -121,7 +117,7 @@ public class Vector2D {
 		
 		double len = this.length();
 		if (len == 0)
-			return 0.0;
+			return 0f;
 
 		sin = y / len;
 		cos = x / len;
@@ -141,7 +137,11 @@ public class Vector2D {
 		else if(fourthQuadrant)
 			angle = 2 * Math.PI + asin;
 		
-		return Double.parseDouble(df.format(Math.toDegrees(angle)));
+		return (float)Math.toDegrees(angle);
+	}
+
+	public float getPointDirection(Vector2D target) {
+		return this.sub(target).getAngle();
 	}
 	
 	/**

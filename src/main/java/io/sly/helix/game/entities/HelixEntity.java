@@ -40,6 +40,11 @@ public abstract class HelixEntity extends GameObject {
 	private Collider collider;
 
 	/**
+	 * Whether or not to Update and then Render this Entity. True by default
+	 */
+	private boolean isActive = true;
+
+	/**
 	 * Create a basic Entity
 	 * 
 	 * @param data - {@link helix.game.Data}
@@ -231,5 +236,20 @@ public abstract class HelixEntity extends GameObject {
 
 	public final Collider getCollider() {
 		return collider;
+	}
+
+	/**
+	 * Whether or not to Update and then Render this Entity. True by default
+	 */
+	public boolean isActive() {
+		return isActive;
+	}
+
+	/**
+	 * Set whether to update and then render this entity or not
+	 * @param active
+	 */
+	public void setActive(boolean active) {
+		this.isActive = active;
 	}
 }
