@@ -2,8 +2,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.sly</groupId>
   <artifactId>helix-gen2</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <description>A simple 2D Java game engine made with libGDX</description>
+  <version>v0.0.2</version>
+  <description>A simple game engine for creating games</description>
 	<properties>
 		<gdx.version>1.10.0</gdx.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
